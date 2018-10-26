@@ -61,8 +61,13 @@ public class AlarmLogic {
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, tmpIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-        am.setInexactRepeating(AlarmManager.RTC_WAKEUP, time,
-                AlarmManager.INTERVAL_DAY, pendingIntent);
+        if(System.currentTimeMillis() < time) {
+            am.setInexactRepeating(AlarmManager.RTC_WAKEUP, time,
+                    AlarmManager.INTERVAL_DAY, pendingIntent);
+        }else {
+            am.setInexactRepeating(AlarmManager.RTC_WAKEUP, time + AlarmManager.INTERVAL_DAY,
+                    AlarmManager.INTERVAL_DAY, pendingIntent);
+        }
 
     }
     public void unregisterAlarm(int id){

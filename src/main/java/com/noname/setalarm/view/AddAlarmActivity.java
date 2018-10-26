@@ -8,20 +8,16 @@ import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.TimePicker;
 
-
-import com.github.angads25.toggle.interfaces.OnToggledListener;
-import com.github.angads25.toggle.model.ToggleableView;
 import com.noname.setalarm.AlarmLogic;
 import com.noname.setalarm.R;
 import com.noname.setalarm.databinding.ActivityAddalarmBinding;
@@ -42,6 +38,7 @@ public class AddAlarmActivity extends AppCompatActivity {
     private AlarmLogic alarmLogic;
     private static String uid = java.util.UUID.randomUUID().toString();
     private ClockViewModel viewModel;
+    private SelectionTracker selectionTracker;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,10 +70,29 @@ public class AddAlarmActivity extends AppCompatActivity {
         models.add(clockModel);
         viewModel.insert(clockModel);
 
-        ClockAdapterDiff clockAdapterDiff = new ClockAdapterDiff();
+//        selectionTracker = new SelectionTracker.Builder("selction-clock",
+//                activityAddalarmBinding.recycler, new StableIdKeyProvider(activityAddalarmBinding.recycler),
+//                new MyDetailsLookup(activityAddalarmBinding.recycler), StorageStrategy.createLongStorage()
+//                ).build();
+//
+//        selectionTracker.addObserver(new SelectionTracker.SelectionObserver() {
+//            @Override
+//            public void onItemStateChanged(@NonNull Object key, boolean selected) {
+//                super.onItemStateChanged(key, selected);
+//                Log.d(TAG , "selected item key: " + key);
+//            }
+//        });
+
+        ClockAdapterDiff clockAdapterDiff = new ClockAdapterDiff(getApplicationContext());
         viewModel.getListLiveData().observe(this, clockModels -> {
             clockAdapterDiff.submitList(clockModels);
             Log.d(TAG , "모델추가");
+        });
+
+        clockAdapterDiff.setClockClickListener((hour, minute) -> {
+            activityAddalarmBinding.timer.setHour(hour);
+            activityAddalarmBinding.timer.setMinute(minute);
+            revealpm(hour);
         });
 
         activityAddalarmBinding.recycler.setAdapter(clockAdapterDiff);
@@ -96,7 +112,7 @@ public class AddAlarmActivity extends AppCompatActivity {
                 datetime.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 datetime.set(Calendar.MINUTE, minutes);
 
-                revealam(hourOfDay);
+                revealpm(hourOfDay);
             }
         });
 
@@ -138,13 +154,13 @@ public class AddAlarmActivity extends AppCompatActivity {
         viewModel.deleteAll();
     }
 
-    private void revealam(int hour){
+    private void revealpm(int hour){
 
         //am_pm true : 오후 false: 오전
-        if( (hour <= 12 && !activityAddalarmBinding.pm.isShown())){
-            revealTheam();
+        if( (hour < 12 && !activityAddalarmBinding.pm.isShown())){
+            revealThepm();
         } else if (hour >= 12 && activityAddalarmBinding.pm.isShown()) {
-            hideTheam();
+            hideThepm();
         }
     }
 
@@ -168,7 +184,7 @@ public class AddAlarmActivity extends AppCompatActivity {
     }
 
 
-    private void revealTheam() {
+    private void revealThepm() {
         activityAddalarmBinding.pm.setVisibility(View.VISIBLE);
         Animator reveal = createRevealAnimator(true, activityAddalarmBinding.pm);
         reveal.start();
@@ -177,7 +193,7 @@ public class AddAlarmActivity extends AppCompatActivity {
     /**
      * Hide the am
      */
-    private void hideTheam() {
+    private void hideThepm() {
         Animator hide = createRevealAnimator(false, activityAddalarmBinding.pm);
         hide.setStartDelay(getResources().getInteger(R.integer.default_anim_duration));
         hide.addListener(new AnimatorListenerAdapter() {
