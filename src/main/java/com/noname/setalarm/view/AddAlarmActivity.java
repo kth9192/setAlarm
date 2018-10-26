@@ -2,31 +2,26 @@ package com.noname.setalarm.view;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.SuppressLint;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
-import android.content.res.Resources;
-import android.databinding.Bindable;
-import android.databinding.DataBindingUtil;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+
+import androidx.lifecycle.ViewModelProviders;
+import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.LinearLayout;
 import android.widget.TimePicker;
 
 
 import com.github.angads25.toggle.interfaces.OnToggledListener;
 import com.github.angads25.toggle.model.ToggleableView;
-import com.moldedbits.dialpicker.DialView;
 import com.noname.setalarm.AlarmLogic;
 import com.noname.setalarm.R;
 import com.noname.setalarm.databinding.ActivityAddalarmBinding;
@@ -36,8 +31,6 @@ import com.noname.setalarm.viewmodel.ClockViewModel;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,16 +40,17 @@ public class AddAlarmActivity extends AppCompatActivity {
     private ActivityAddalarmBinding activityAddalarmBinding;
 
     private AlarmLogic alarmLogic;
-    private boolean multi = false;
     private static String uid = java.util.UUID.randomUUID().toString();
     private ClockViewModel viewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         activityAddalarmBinding = DataBindingUtil.setContentView(this, R.layout.activity_addalarm);
         activityAddalarmBinding.setLifecycleOwner(this);
         activityAddalarmBinding.setProvider(new ImageProvider(R.drawable.hills, R.drawable.moon));
+        setSupportActionBar(activityAddalarmBinding.toolbar);
 
         Calendar calendar = Calendar.getInstance();
         if (calendar.get(Calendar.HOUR_OF_DAY) >= 12){
@@ -81,10 +75,10 @@ public class AddAlarmActivity extends AppCompatActivity {
 
         ClockAdapterDiff clockAdapterDiff = new ClockAdapterDiff();
         viewModel.getListLiveData().observe(this, clockModels -> {
-            
             clockAdapterDiff.submitList(clockModels);
             Log.d(TAG , "모델추가");
         });
+
         activityAddalarmBinding.recycler.setAdapter(clockAdapterDiff);
         LinearLayoutManager horizontalLayout = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         activityAddalarmBinding.recycler.setLayoutManager(horizontalLayout);
@@ -95,31 +89,20 @@ public class AddAlarmActivity extends AppCompatActivity {
             public void onTimeChanged(TimePicker timePicker, int hourOfDay, int minutes) {
                 Log.d(TAG, "시" + hourOfDay + ":" + minutes + "분");
 
-                viewModel.updateHour(hourOfDay, minutes);
-                viewModel.updateMinute(hourOfDay, minutes);
+                viewModel.updateHour(clockAdapterDiff.getSelectedID(), hourOfDay, minutes);
+                viewModel.updateMinute(clockAdapterDiff.getSelectedID(), hourOfDay, minutes);
 
                 Calendar datetime = Calendar.getInstance();
                 datetime.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 datetime.set(Calendar.MINUTE, minutes);
 
                 revealam(hourOfDay);
-
             }
         });
 
-        activityAddalarmBinding.timeSwitch.setOnToggledListener(new OnToggledListener() {
+        activityAddalarmBinding.addSize.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSwitched(ToggleableView toggleableView, boolean isOn) {
-                multi = isOn;
-                Log.d(TAG, "체크" + isOn);
-            }
-        });
-
-
-        activityAddalarmBinding.confirm.setOnClickListener(v -> {
-
-            if (multi){
-
+            public void onClick(View v) {
                 Calendar tmp = Calendar.getInstance();
                 Log.d(TAG, "추가");
 
@@ -127,8 +110,11 @@ public class AddAlarmActivity extends AppCompatActivity {
                         tmp.get(Calendar.HOUR_OF_DAY), tmp.get(Calendar.MINUTE), tmp.get(Calendar.HOUR_OF_DAY)<12);
                 models.add(tmpClock);
                 viewModel.insert(tmpClock);
+            }
+        });
 
-            }else {
+        activityAddalarmBinding.confirm.setOnClickListener(v -> {
+
                 List<ClockModel> tmpList = viewModel.getListLiveData().getValue();
 
                 for (int i = 0; i<tmpList.size(); i++) {
@@ -143,9 +129,13 @@ public class AddAlarmActivity extends AppCompatActivity {
                 viewModel.deleteAll();
                 super.onBackPressed();
 
-            }
-
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        viewModel.deleteAll();
     }
 
     private void revealam(int hour){
@@ -177,11 +167,6 @@ public class AddAlarmActivity extends AppCompatActivity {
         return animator;
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        viewModel.deleteAll();
-    }
 
     private void revealTheam() {
         activityAddalarmBinding.pm.setVisibility(View.VISIBLE);
@@ -203,10 +188,6 @@ public class AddAlarmActivity extends AppCompatActivity {
             }
         });
         hide.start();
-    }
-
-    private void sortClockModelList(ArrayList<ClockModel> target){
-
     }
 
 }

@@ -1,11 +1,10 @@
 package com.noname.setalarm.viewmodel;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.annotation.NonNull;
 
-import com.noname.setalarm.model.ClockModel;
 import com.noname.setalarm.repository.AlarmRoom;
 import com.noname.setalarm.repository.AlarmRoomRepo;
 

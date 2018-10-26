@@ -1,34 +1,31 @@
 package com.noname.setalarm;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
+import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.AnimationUtils;
 
 
 import com.noname.setalarm.databinding.ActivityMainBinding;
-import com.noname.setalarm.model.AlarmModel;
 import com.noname.setalarm.model.ClockModel;
 import com.noname.setalarm.repository.AlarmRoom;
 import com.noname.setalarm.view.AddAlarmActivity;
 import com.noname.setalarm.view.AlarmAdpater;
-import com.noname.setalarm.viewmodel.AlarmRecycleViewModel;
 import com.noname.setalarm.viewmodel.AlarmRoomViewModel;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,8 +41,6 @@ public class MainActivity extends AppCompatActivity {
         alarmRoomViewModel = ViewModelProviders.of(this).get(AlarmRoomViewModel.class);
         activityMainBinding.setLifecycleOwner(this);
 
-        setSupportActionBar(activityMainBinding.toolbar);
-
         activityMainBinding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 ActivityOptionsCompat options = ActivityOptionsCompat.
                         makeSceneTransitionAnimation(MainActivity.this, view, "toAddAlarm");
                 startActivity(intent, options.toBundle());
+
             }
         });
 

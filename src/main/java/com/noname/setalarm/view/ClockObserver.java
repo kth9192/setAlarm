@@ -1,7 +1,7 @@
 package com.noname.setalarm.view;
 
-import android.databinding.BaseObservable;
-import android.databinding.Bindable;
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
 
 import com.noname.setalarm.model.ClockModel;
 

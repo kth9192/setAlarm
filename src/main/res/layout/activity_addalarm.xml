@@ -9,11 +9,11 @@
             type="com.noname.setalarm.view.ImageProvider"/>
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="wrap_content"
             android:layout_height="200dp"
@@ -25,62 +25,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pm"
             app:layout_constraintVertical_bias="0.021">
-
-            <!--<com.moldedbits.dialpicker.DialView-->
-            <!--android:id="@+id/dial_hour"-->
-            <!--android:layout_width="100dp"-->
-            <!--android:layout_height="200dp"-->
-            <!--android:layout_alignParentStart="true"-->
-            <!--android:layout_centerInParent="true"-->
-            <!--android:elevation="2dp"-->
-            <!--android:padding="5dp"-->
-            <!--app:centerPadding="50"-->
-            <!--app:dialDirection="RIGHT"-->
-            <!--app:endColor="#FF8A80"-->
-            <!--app:intervalValueOnLine="true"-->
-            <!--app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--app:layout_constraintEnd_toEndOf="parent"-->
-            <!--app:layout_constraintHorizontal_bias="1.0"-->
-            <!--app:layout_constraintStart_toStartOf="parent"-->
-            <!--app:layout_constraintTop_toTopOf="parent"-->
-            <!--app:leastCount="1"-->
-            <!--app:lineInterval="1"-->
-            <!--app:maxValue="13"-->
-            <!--app:minValue="1"-->
-            <!--app:paintArcColor="#FF8A80"-->
-            <!--app:paintLineColor="#000000"-->
-            <!--app:paintTextColor="#ffffff"-->
-            <!--app:startColor="#FF8A80"-->
-            <!--app:textSize="40"-->
-            <!--app:tickGapAngle="20" />-->
-
-            <!--<com.moldedbits.dialpicker.DialView-->
-            <!--android:id="@+id/dial_minute"-->
-            <!--android:layout_width="200dp"-->
-            <!--android:layout_height="400dp"-->
-            <!--android:layout_alignParentStart="true"-->
-            <!--android:layout_centerInParent="true"-->
-            <!--android:padding="5dp"-->
-            <!--app:centerPadding="50"-->
-            <!--app:dialDirection="RIGHT"-->
-            <!--app:endColor="#FF8A80"-->
-            <!--app:intervalValueOnLine="true"-->
-            <!--app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--app:layout_constraintEnd_toEndOf="parent"-->
-            <!--app:layout_constraintHorizontal_bias="1.0"-->
-            <!--app:layout_constraintStart_toStartOf="parent"-->
-            <!--app:layout_constraintTop_toTopOf="parent"-->
-            <!--app:layout_constraintVertical_bias="0.0"-->
-            <!--app:leastCount="1"-->
-            <!--app:lineInterval="5"-->
-            <!--app:maxValue="59"-->
-            <!--app:minValue="00"-->
-            <!--app:paintArcColor="#FF8A80"-->
-            <!--app:paintLineColor="#000000"-->
-            <!--app:paintTextColor="#000000"-->
-            <!--app:startColor="#FF8A80"-->
-            <!--app:textSize="40"-->
-            <!--app:tickGapAngle="5" />-->
 
             <TimePicker
                 android:id="@+id/timer"
@@ -95,9 +39,9 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
@@ -106,29 +50,92 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:orientation="horizontal"
-            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.806" />
+            app:layout_constraintVertical_bias="0.767" />
 
-        <Button
-            android:id="@+id/confirm"
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:transitionName="toAddAlarm"
-            android:text="추가"
-            android:textSize="16sp"
-            android:textColor="@android:color/white"
-            android:background="@color/colorAccent"
+            android:layout_height="100dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintVertical_bias="1.0">
+
+            <com.google.android.material.bottomappbar.BottomAppBar
+                android:id="@+id/toolbar"
+                style="@style/Widget.MaterialComponents.BottomAppBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                app:fabAlignmentMode="center"
+                android:backgroundTint="@color/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0"
+                >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageButton
+                        android:id="@+id/addSize"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/add_white_24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.975"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="1.0" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.bottomappbar.BottomAppBar>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:src="@drawable/alarm_on_white_24dp"
+                android:textColor="@android:color/white"
+                app:layout_anchor="@+id/toolbar"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <!--<Button-->
+            <!--android:id="@+id/confirm"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="추가"-->
+            <!--android:textSize="16sp"-->
+            <!--android:textColor="@android:color/white"-->
+            <!--android:background="@color/colorAccent"-->
+            <!--android:transitionName="toAddAlarm"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintHorizontal_bias="1.0"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent"-->
+            <!--app:layout_constraintVertical_bias="1.0" />-->
 
         <ImageView
             android:id="@+id/am"
@@ -162,24 +169,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.02" />
 
-        <com.github.angads25.toggle.widget.LabeledSwitch
-            android:id="@+id/timeSwitch"
-            android:layout_width="wrap_content"
-            android:layout_height="31dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="144dp"
-            android:textSize="14sp"
-            app:colorBorder="@color/colorAccent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.834"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.89"
-            app:on="false" />
-
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

@@ -1,11 +1,12 @@
 package com.noname.setalarm.view;
 
-import android.databinding.DataBindingUtil;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.recyclerview.extensions.ListAdapter;
-import android.support.v7.util.DiffUtil;
-import android.support.v7.widget.RecyclerView;
+import androidx.databinding.DataBindingUtil;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ListAdapter;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,15 +15,13 @@ import com.noname.setalarm.R;
 import com.noname.setalarm.databinding.RecyclerClockItemBinding;
 import com.noname.setalarm.model.ClockModel;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 public class ClockAdapterDiff extends ListAdapter<ClockModel, ClockAdapterDiff.ClockViewHodler> {
+
+    private static String TAG = ClockAdapterDiff.class.getSimpleName();
+    private int selectedID;
 
     protected ClockAdapterDiff() {
         super(DIFF_CALLBACK);
-
     }
 
     @NonNull
@@ -35,6 +34,18 @@ public class ClockAdapterDiff extends ListAdapter<ClockModel, ClockAdapterDiff.C
     @Override
     public void onBindViewHolder(@NonNull ClockViewHodler viewHodler, int i) {
         viewHodler.getRecyclerClockItemBinding().setObserver(new ClockObserver(getItem(i)));
+
+        if(getItemCount() == 1){
+             selectedID = getItem(0).getId();
+        }
+
+        viewHodler.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, i + " 번 선택");
+                selectedID = getItem(i).getId();
+            }
+        });
     }
 
     public static final DiffUtil.ItemCallback<ClockModel> DIFF_CALLBACK =
@@ -53,6 +64,10 @@ public class ClockAdapterDiff extends ListAdapter<ClockModel, ClockAdapterDiff.C
                     return oldModel.equals(newModel);
                 }
             };
+
+    public int getSelectedID(){
+        return selectedID;
+    }
 
     static class ClockViewHodler extends RecyclerView.ViewHolder{
 

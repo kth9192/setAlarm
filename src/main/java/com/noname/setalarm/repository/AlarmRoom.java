@@ -1,16 +1,15 @@
 package com.noname.setalarm.repository;
 
-import android.arch.persistence.room.Embedded;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
-import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.Relation;
-import android.arch.persistence.room.TypeConverters;
-import android.support.annotation.NonNull;
+import androidx.room.Embedded;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.PrimaryKey;
+import androidx.room.Relation;
+import androidx.room.TypeConverters;
+import androidx.annotation.NonNull;
 
 import com.noname.setalarm.model.ClockModel;
 
-import java.time.Clock;
 import java.util.List;
 
 @Entity

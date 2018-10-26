@@ -1,7 +1,7 @@
 package com.noname.setalarm.repository;
 
 import android.app.Application;
-import android.arch.lifecycle.LiveData;
+import androidx.lifecycle.LiveData;
 
 import com.noname.setalarm.model.ClockModel;
 
@@ -60,11 +60,11 @@ public class AlarmRoomRepo {
         executorService.execute(() -> clockDao.deleteAll());
     }
 
-    public void updateClockHour(int hour, int minute){
-        executorService.execute(() -> clockDao.updateClockHour(hour, minute));
+    public void updateClockHour(int id, int hour, int minute){
+        executorService.execute(() -> clockDao.updateClockHour(id, hour));
     }
-    public void updateClockMinute(int hour, int minute){
-        executorService.execute(() -> clockDao.updateClockMinute(hour, minute));
+    public void updateClockMinute(int id, int hour, int minute){
+        executorService.execute(() -> clockDao.updateClockMinute(id, minute));
     }
 }
 

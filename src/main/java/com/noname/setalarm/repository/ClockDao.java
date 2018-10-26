@@ -1,12 +1,12 @@
 package com.noname.setalarm.repository;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Delete;
-import android.arch.persistence.room.Insert;
-import android.arch.persistence.room.OnConflictStrategy;
-import android.arch.persistence.room.Query;
-import android.arch.persistence.room.Update;
+import androidx.lifecycle.LiveData;
+import androidx.room.Dao;
+import androidx.room.Delete;
+import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
+import androidx.room.Query;
+import androidx.room.Update;
 
 import com.noname.setalarm.model.ClockModel;
 
@@ -26,11 +26,11 @@ public interface ClockDao {
     @Query("SELECT * from ClockModel")
     LiveData<List<ClockModel>> getAllClock();
 
-    @Query("UPDATE ClockModel SET hour= :hour WHERE minute = :minute")
-    void updateClockHour(int hour, int minute);
+    @Query("UPDATE ClockModel SET hour= :hour WHERE id = :id")
+    void updateClockHour(int id , int hour);
 
-    @Query("UPDATE ClockModel SET minute= :minute WHERE hour = :hour")
-    void updateClockMinute(int hour, int minute);
+    @Query("UPDATE ClockModel SET minute= :minute WHERE id = :id")
+    void updateClockMinute(int id, int minute);
 
     @Query("DELETE FROM ClockModel")
     void deleteAll();

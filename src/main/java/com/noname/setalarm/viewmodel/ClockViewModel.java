@@ -1,14 +1,13 @@
 package com.noname.setalarm.viewmodel;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.annotation.NonNull;
 
 import com.noname.setalarm.model.ClockModel;
 import com.noname.setalarm.repository.AlarmRoom;
 import com.noname.setalarm.repository.AlarmRoomRepo;
-import com.noname.setalarm.repository.ClockDao;
 
 import java.util.List;
 
@@ -37,8 +36,8 @@ public class ClockViewModel extends AndroidViewModel {
 
     public void deleteAll(){alarmRoomRepo.deleteAllClock();}
 
-    public void updateHour(int hour, int minute){alarmRoomRepo.updateClockHour(hour, minute);}
+    public void updateHour(int id, int hour, int minute){alarmRoomRepo.updateClockHour(id, hour, minute);}
 
-    public void updateMinute(int hour, int minute){alarmRoomRepo.updateClockMinute(hour, minute);}
+    public void updateMinute(int id, int hour, int minute){alarmRoomRepo.updateClockMinute(id, hour, minute);}
 
 }
