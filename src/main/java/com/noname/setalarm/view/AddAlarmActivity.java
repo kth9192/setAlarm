@@ -195,12 +195,11 @@ public class AddAlarmActivity extends AppCompatActivity {
      */
     private void hideThepm() {
         Animator hide = createRevealAnimator(false, activityAddalarmBinding.pm);
-        hide.setStartDelay(getResources().getInteger(R.integer.default_anim_duration));
         hide.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
                 activityAddalarmBinding.pm.setVisibility(View.INVISIBLE);
-
             }
         });
         hide.start();

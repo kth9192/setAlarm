@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
@@ -52,6 +53,7 @@ public class ClockAdapterDiff extends ListAdapter<ClockModel, ClockAdapterDiff.C
         return new ClockViewHodler(v);
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull ClockViewHodler viewHodler, int i) {
 
@@ -59,17 +61,23 @@ public class ClockAdapterDiff extends ListAdapter<ClockModel, ClockAdapterDiff.C
 
         if (selectedID == getItem(i).getId()) {
             viewHodler.itemView.setBackground(ContextCompat.getDrawable(context, R.drawable.rounded_background));
+            viewHodler.getRecyclerClockItemBinding().hour.setTextColor(ContextCompat.getColor(context, android.R.color.white));
+            viewHodler.getRecyclerClockItemBinding().minute.setTextColor(ContextCompat.getColor(context, android.R.color.white));
+            viewHodler.getRecyclerClockItemBinding().divider.setTextColor(ContextCompat.getColor(context, android.R.color.white));
         }else {
             viewHodler.itemView.setBackground(ContextCompat.getDrawable(context, R.drawable.default_background));
+            viewHodler.getRecyclerClockItemBinding().hour.setTextColor(ContextCompat.getColor(context, android.R.color.black));
+            viewHodler.getRecyclerClockItemBinding().minute.setTextColor(ContextCompat.getColor(context, android.R.color.black));
+            viewHodler.getRecyclerClockItemBinding().divider.setTextColor(ContextCompat.getColor(context, android.R.color.black));
         }
 
         viewHodler.itemView.setOnClickListener(v -> {
 //            Log.d(TAG, i + " 번 선택");
             selectedID = getItem(i).getId();
-//            v.setBackground(ContextCompat.getDrawable(context, R.drawable.rounded_background) );
+
+
             if (clockClickListener != null){
                 clockClickListener.OnClockItemClick(getItem(i).getHour(), getItem(i).getMinute());
-
             }
             notifyDataSetChanged();
         });
