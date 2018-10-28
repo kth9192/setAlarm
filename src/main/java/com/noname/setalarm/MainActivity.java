@@ -1,8 +1,11 @@
 package com.noname.setalarm;
 
-import androidx.core.app.ActivityOptionsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -10,11 +13,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.animation.AnimationUtils;
 
 
 import com.noname.setalarm.databinding.ActivityMainBinding;
@@ -46,10 +47,31 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(getApplicationContext(), AddAlarmActivity.class);
-                ActivityOptionsCompat options = ActivityOptionsCompat.
-                        makeSceneTransitionAnimation(MainActivity.this, view, "toAddAlarm");
-                startActivity(intent, options.toBundle());
+                rescaleViewAnimation(activityMainBinding.fab, 0, 300, new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        Intent intent = new Intent(getApplicationContext(), AddAlarmActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(0, 0);
+
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+
 
             }
         });
@@ -79,6 +101,55 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        rescaleViewAnimation(activityMainBinding.fab, 1f, 300, null);
+
+//        activityMainBinding.fab.animate()
+//                .scaleX(1)
+//                .scaleY(1)
+//                .setInterpolator(new FastOutSlowInInterpolator())
+//                .setStartDelay(200)
+//                .setListener(new Animator.AnimatorListener() {
+//                    @Override
+//                    public void onAnimationStart(Animator animation) { }
+//
+//                    @Override
+//                    public void onAnimationEnd(Animator animation) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onAnimationCancel(Animator animation) { }
+//
+//                    @Override
+//                    public void onAnimationRepeat(Animator animation) { }
+//                })
+//                .start();
+    }
+
+    private void rescaleViewAnimation(View view,
+                                      float targetScale,
+                                      int durationOffset,
+                                      Animator.AnimatorListener listener) {
+        ObjectAnimator scaleOnX = ObjectAnimator.ofFloat(view, "scaleX", targetScale);
+        ObjectAnimator scaleOnY = ObjectAnimator.ofFloat(view, "scaleY", targetScale);
+        scaleOnX.setDuration(durationOffset);
+        scaleOnY.setDuration(durationOffset);
+
+        AnimatorSet scaleSet = new AnimatorSet();
+        scaleSet.playTogether(
+                scaleOnX,
+                scaleOnY
+        );
+        if (listener != null){
+            scaleSet.addListener(listener);
+        }
+
+        scaleSet.start();
     }
 
     @Override

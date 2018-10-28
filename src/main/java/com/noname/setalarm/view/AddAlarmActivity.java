@@ -6,6 +6,9 @@ import android.animation.AnimatorListenerAdapter;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.databinding.DataBindingUtil;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
@@ -13,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -180,12 +184,50 @@ public class AddAlarmActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        rescaleViewAnimation(activityAddalarmBinding.confirm, 1f, 500, null);
+
+    }
+
+    public void onPause() {
+        super.onPause();
+        overridePendingTransition(0, 0);
+    }
+
+    @Override
+    public void finish(){
+
+        rescaleViewAnimation(activityAddalarmBinding.confirm, 0, 300, new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                AddAlarmActivity.super.finish();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+    }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
         viewModel.deleteAll();
     }
 
-    private void revealpm(int hour){
+        private void revealpm(int hour){
 
         //am_pm true : 오후 false: 오전
         if( (hour < 12 && !activityAddalarmBinding.pm.isShown())){
@@ -214,7 +256,6 @@ public class AddAlarmActivity extends AppCompatActivity {
         return animator;
     }
 
-
     private void revealThepm() {
         activityAddalarmBinding.pm.setVisibility(View.VISIBLE);
         Animator reveal = createRevealAnimator(true, activityAddalarmBinding.pm);
@@ -236,4 +277,24 @@ public class AddAlarmActivity extends AppCompatActivity {
         hide.start();
     }
 
+    private void rescaleViewAnimation(View view,
+                                      float targetScale,
+                                      int durationOffset,
+                                      Animator.AnimatorListener listener) {
+        ObjectAnimator scaleOnX = ObjectAnimator.ofFloat(view, "scaleX", targetScale);
+        ObjectAnimator scaleOnY = ObjectAnimator.ofFloat(view, "scaleY", targetScale);
+        scaleOnX.setDuration(durationOffset);
+        scaleOnY.setDuration(durationOffset);
+
+        AnimatorSet scaleSet = new AnimatorSet();
+        scaleSet.playTogether(
+                scaleOnX,
+                scaleOnY
+        );
+        if (listener != null){
+            scaleSet.addListener(listener);
+        }
+
+        scaleSet.start();
+    }
 }
