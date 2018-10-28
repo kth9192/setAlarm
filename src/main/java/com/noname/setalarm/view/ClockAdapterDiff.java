@@ -75,7 +75,6 @@ public class ClockAdapterDiff extends ListAdapter<ClockModel, ClockAdapterDiff.C
 //            Log.d(TAG, i + " 번 선택");
             selectedID = getItem(i).getId();
 
-
             if (clockClickListener != null){
                 clockClickListener.OnClockItemClick(getItem(i).getHour(), getItem(i).getMinute());
             }

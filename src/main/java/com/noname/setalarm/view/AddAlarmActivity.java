@@ -5,6 +5,8 @@ import android.animation.AnimatorListenerAdapter;
 
 import androidx.lifecycle.ViewModelProviders;
 import androidx.databinding.DataBindingUtil;
+
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,6 +41,7 @@ public class AddAlarmActivity extends AppCompatActivity {
     private static String uid = java.util.UUID.randomUUID().toString();
     private ClockViewModel viewModel;
     private SelectionTracker selectionTracker;
+    private ArrayList<ClockModel> models = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +51,7 @@ public class AddAlarmActivity extends AppCompatActivity {
         activityAddalarmBinding.setLifecycleOwner(this);
         activityAddalarmBinding.setProvider(new ImageProvider(R.drawable.hills, R.drawable.moon));
         setSupportActionBar(activityAddalarmBinding.toolbar);
+        Intent intent = getIntent();
 
         Calendar calendar = Calendar.getInstance();
         if (calendar.get(Calendar.HOUR_OF_DAY) >= 12){
@@ -57,19 +61,23 @@ public class AddAlarmActivity extends AppCompatActivity {
         }
 
         alarmLogic = new AlarmLogic(this);
-//        activityAddalarmBinding.setLifecycleOwner(this);
         viewModel = ViewModelProviders.of(this).get(ClockViewModel.class);
 
-        ArrayList<ClockModel> models = new ArrayList<>();
-        alarmLogic.getCurrentHour();
-        alarmLogic.getCurrentMinute();
+        if (intent.hasExtra("targetList")) {
 
-        Log.d(TAG, "HOUR + " + alarmLogic.getCurrentHour() + "MINUTE : " + alarmLogic.getCurrentMinute());
-        ClockModel clockModel = new ClockModel(alarmLogic.makeID(alarmLogic.getCurrentHour(), alarmLogic.getCurrentMinute(), alarmLogic.getCurrentSecond()),
-                alarmLogic.getCurrentHour(), alarmLogic.getCurrentMinute(), alarmLogic.getCurrentHour()<12);
-        models.add(clockModel);
-        viewModel.insert(clockModel);
+            models = intent.getParcelableArrayListExtra("targetList");
 
+            for (ClockModel clockModel : models){
+                viewModel.insert(clockModel);
+            }
+
+        }else {
+//        Log.d(TAG, "HOUR + " + alarmLogic.getCurrentHour() + "MINUTE : " + alarmLogic.getCurrentMinute());
+            ClockModel clockModel = new ClockModel(alarmLogic.makeID(alarmLogic.getCurrentHour(), alarmLogic.getCurrentMinute(), alarmLogic.getCurrentSecond()),
+                    alarmLogic.getCurrentHour(), alarmLogic.getCurrentMinute(), alarmLogic.getCurrentHour() >= 12);
+            models.add(clockModel);
+            viewModel.insert(clockModel);
+        }
 //        selectionTracker = new SelectionTracker.Builder("selction-clock",
 //                activityAddalarmBinding.recycler, new StableIdKeyProvider(activityAddalarmBinding.recycler),
 //                new MyDetailsLookup(activityAddalarmBinding.recycler), StorageStrategy.createLongStorage()
@@ -105,8 +113,9 @@ public class AddAlarmActivity extends AppCompatActivity {
             public void onTimeChanged(TimePicker timePicker, int hourOfDay, int minutes) {
                 Log.d(TAG, "시" + hourOfDay + ":" + minutes + "분");
 
-                viewModel.updateHour(clockAdapterDiff.getSelectedID(), hourOfDay, minutes);
-                viewModel.updateMinute(clockAdapterDiff.getSelectedID(), hourOfDay, minutes);
+                viewModel.updateHour(clockAdapterDiff.getSelectedID(), hourOfDay);
+                viewModel.updateMinute(clockAdapterDiff.getSelectedID(),  minutes);
+                viewModel.updateAMPM(clockAdapterDiff.getSelectedID(),  hourOfDay >= 12);
 
                 Calendar datetime = Calendar.getInstance();
                 datetime.set(Calendar.HOUR_OF_DAY, hourOfDay);
@@ -116,6 +125,7 @@ public class AddAlarmActivity extends AppCompatActivity {
             }
         });
 
+        ArrayList<ClockModel> finalModels = models;
         activityAddalarmBinding.addSize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,16 +134,37 @@ public class AddAlarmActivity extends AppCompatActivity {
 
                 ClockModel tmpClock = new ClockModel(alarmLogic.makeID(tmp.get(Calendar.HOUR_OF_DAY), tmp.get(Calendar.MINUTE), tmp.get(Calendar.SECOND)),
                         tmp.get(Calendar.HOUR_OF_DAY), tmp.get(Calendar.MINUTE), tmp.get(Calendar.HOUR_OF_DAY)<12);
-                models.add(tmpClock);
+                finalModels.add(tmpClock);
                 viewModel.insert(tmpClock);
             }
         });
 
         activityAddalarmBinding.confirm.setOnClickListener(v -> {
+            //수정버튼으로 들어온 경우
+            //원래 id 의 alarmroom 데이터를 수정된 clocklist로 덮어씌워야함.
+            //원래 id의 알람은 삭제.
+            if(intent.hasExtra("targetList")){
+
+                for (int i = 0; i<models.size(); i++) {
+                    alarmLogic.unregisterAlarm(models.get(i).getId());
+                }
 
                 List<ClockModel> tmpList = viewModel.getListLiveData().getValue();
 
-                for (int i = 0; i<tmpList.size(); i++) {
+                for (int i = 0; i < tmpList.size(); i++) {
+                    alarmLogic.setToCalendar(tmpList.get(i).getHour(),
+                            tmpList.get(i).getMinute(),
+                            tmpList.get(i).getHour() >= 12);
+                    alarmLogic.newAlarm(tmpList.get(i).getHour() +
+                                    tmpList.get(i).getMinute(),
+                            alarmLogic.getCalendarTime());
+                }
+                viewModel.updateAlarm(intent.getStringExtra("alarmId"), tmpList);
+
+            }else {
+                List<ClockModel> tmpList = viewModel.getListLiveData().getValue();
+
+                for (int i = 0; i < tmpList.size(); i++) {
                     alarmLogic.setToCalendar(tmpList.get(i).getHour(),
                             tmpList.get(i).getMinute(),
                             tmpList.get(i).getHour() >= 12);
@@ -142,9 +173,9 @@ public class AddAlarmActivity extends AppCompatActivity {
                             alarmLogic.getCalendarTime());
                 }
                 viewModel.insertAlarm(new AlarmRoom(UUID.randomUUID().toString(), tmpList));
-                viewModel.deleteAll();
-                super.onBackPressed();
-
+            }
+            viewModel.deleteAll();
+            super.onBackPressed();
         });
     }
 

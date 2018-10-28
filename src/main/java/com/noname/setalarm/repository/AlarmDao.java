@@ -1,5 +1,7 @@
 package com.noname.setalarm.repository;
 
+import com.noname.setalarm.model.ClockModel;
+
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -15,11 +17,11 @@ public interface AlarmDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertAlarm(AlarmRoom... alarmRoom);
 
+    @Query("UPDATE AlarmRoom SET timeList= :timeList WHERE alarmId = :id")
+    void updateAlarm(String id, List<ClockModel> timeList);
+
     @Delete
     void deleteAlarm(AlarmRoom alarmRoom);
-
-//    @Query("SELECT * from AlarmRoom where id = :id")
-//    LiveData<AlarmRoom> getAlarm(String id);
 
     @Query("SELECT * from AlarmRoom")
     LiveData<List<AlarmRoom>> getAllAlarm();

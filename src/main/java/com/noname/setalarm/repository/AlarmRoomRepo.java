@@ -13,6 +13,7 @@ public class AlarmRoomRepo {
 
     private AlarmDao alarmDao;
     private ClockDao clockDao;
+
     private LiveData<List<AlarmRoom>> alarmLiveData;
     private LiveData<List<ClockModel>> clockLiveData;
     private ExecutorService executorService;
@@ -36,12 +37,12 @@ public class AlarmRoomRepo {
         return clockLiveData;
     }
 
-//    public LiveData<AlarmRoom> getAlarm(String id){
-//        return alarmDao.getAlarm(id);
-//    }
-
     public void insert(AlarmRoom alarmRoom) {
         executorService.execute(() -> alarmDao.insertAlarm(alarmRoom));
+    }
+
+    public void update(String id, List<ClockModel> timeList) {
+        executorService.execute(() -> alarmDao.updateAlarm(id, timeList));
     }
 
     public void delete(AlarmRoom alarmRoom){
@@ -60,11 +61,15 @@ public class AlarmRoomRepo {
         executorService.execute(() -> clockDao.deleteAll());
     }
 
-    public void updateClockHour(int id, int hour, int minute){
+    public void updateClockHour(int id, int hour){
         executorService.execute(() -> clockDao.updateClockHour(id, hour));
     }
-    public void updateClockMinute(int id, int hour, int minute){
+    public void updateClockMinute(int id, int minute){
         executorService.execute(() -> clockDao.updateClockMinute(id, minute));
     }
+    public void updateClockAMPM(int id, boolean am_pm){
+        executorService.execute(() -> clockDao.updateClockAMPM(id, am_pm));
+    }
+
 }
 

@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -66,7 +67,11 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public int compare(ClockModel oldData, ClockModel newData) {
                             // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
-                            return Integer.compare(newData.getId(), oldData.getId());
+//
+//                            Log.d(TAG, "전데이터 " + oldData.getId());
+//                            Log.d(TAG, "후데이터 " + newData.getId());
+
+                            return Integer.compare(oldData.getId(), newData.getId());
                         }
                     });
                 }

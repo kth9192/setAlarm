@@ -32,6 +32,9 @@ public interface ClockDao {
     @Query("UPDATE ClockModel SET minute= :minute WHERE id = :id")
     void updateClockMinute(int id, int minute);
 
+    @Query("UPDATE ClockModel SET am_pm = :am_pm WHERE id = :id")
+    void updateClockAMPM(int id, boolean am_pm);
+
     @Query("DELETE FROM ClockModel")
     void deleteAll();
 }

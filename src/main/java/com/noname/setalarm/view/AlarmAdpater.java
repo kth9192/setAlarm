@@ -1,31 +1,40 @@
 package com.noname.setalarm.view;
 
 import android.content.Context;
+
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
 import com.noname.setalarm.AlarmLogic;
+import com.noname.setalarm.MainActivity;
 import com.noname.setalarm.R;
 import com.noname.setalarm.databinding.RecyclerItemAlarmBinding;
 import com.noname.setalarm.model.ClockModel;
 import com.noname.setalarm.repository.AlarmRoom;
 import com.noname.setalarm.viewmodel.AlarmRoomViewModel;
 
+import java.util.ArrayList;
+
 public class AlarmAdpater extends ListAdapter<AlarmRoom, AlarmAdpater.AlarmViewHodler> {
 
     private static String TAG = AlarmAdpater.class.getSimpleName();
     private AlarmLogic alarmLogic;
     private AlarmRoomViewModel alarmRoomViewModel;
+    private Context context;
 
     public AlarmAdpater(Context context, AlarmRoomViewModel alarmRoomViewModel) {
         super(DIFF_CALLBACK);
+        this.context = context;
         alarmLogic = new AlarmLogic(context);
         this.alarmRoomViewModel = alarmRoomViewModel;
     }
@@ -41,6 +50,21 @@ public class AlarmAdpater extends ListAdapter<AlarmRoom, AlarmAdpater.AlarmViewH
     public void onBindViewHolder(@NonNull AlarmViewHodler alarmViewHodler, int i) {
 
         alarmViewHodler.getRecyclerItemAlarmBinding().setObserver(new AlarmObserver(getItem(i)));
+
+        alarmViewHodler.getRecyclerItemAlarmBinding().modifyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, AddAlarmActivity.class);
+
+                ArrayList<ClockModel> tmplist = new ArrayList();
+                for (ClockModel clockModel: getItem(i).getTimeList()){
+                    tmplist.add(clockModel);
+                }
+                intent.putParcelableArrayListExtra("targetList", tmplist);
+                intent.putExtra("alarmId", getItem(i).getAlarmId());
+                context.startActivity(intent);
+            }
+        });
 
         alarmViewHodler.getRecyclerItemAlarmBinding().onswitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -101,7 +125,6 @@ public class AlarmAdpater extends ListAdapter<AlarmRoom, AlarmAdpater.AlarmViewH
             recyclerItemAlarmBinding = DataBindingUtil.bind(itemView);
             recyclerItemAlarmBinding.executePendingBindings();
             recyclerItemAlarmBinding.onswitch.setChecked(true);
-
         }
 
         public RecyclerItemAlarmBinding getRecyclerItemAlarmBinding() {

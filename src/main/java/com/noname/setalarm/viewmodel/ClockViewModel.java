@@ -28,16 +28,21 @@ public class ClockViewModel extends AndroidViewModel {
         return listLiveData;
     }
 
+
     public void insert(ClockModel clockModel) { alarmRoomRepo.insertClockModel(clockModel); }
 
     public void insertAlarm(AlarmRoom alarmRoom){alarmRoomRepo.insert(alarmRoom);}
+
+    public void updateAlarm(String id, List<ClockModel> timeList){alarmRoomRepo.update(id, timeList);}
 
     public void delete(ClockModel clockModel){alarmRoomRepo.deleteClockModel(clockModel);}
 
     public void deleteAll(){alarmRoomRepo.deleteAllClock();}
 
-    public void updateHour(int id, int hour, int minute){alarmRoomRepo.updateClockHour(id, hour, minute);}
+    public void updateHour(int id, int hour){alarmRoomRepo.updateClockHour(id, hour);}
 
-    public void updateMinute(int id, int hour, int minute){alarmRoomRepo.updateClockMinute(id, hour, minute);}
+    public void updateMinute(int id, int minute){alarmRoomRepo.updateClockMinute(id, minute);}
+
+    public void updateAMPM(int id, boolean am_pm){alarmRoomRepo.updateClockAMPM(id, am_pm);}
 
 }
