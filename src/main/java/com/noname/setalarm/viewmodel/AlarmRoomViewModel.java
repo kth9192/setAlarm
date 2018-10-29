@@ -31,4 +31,6 @@ public class AlarmRoomViewModel extends AndroidViewModel {
 
     public void delete(AlarmRoom alarmRoom){alarmRoomRepo.delete(alarmRoom);}
 
+    public void updateState(String id, boolean checked){alarmRoomRepo.updateAlarmState(id, checked);}
+
 }

@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.noname.setalarm.receiver.AlarmReceiver;
 import com.noname.setalarm.repository.AlarmDao;
@@ -46,16 +47,20 @@ public class AlarmLogic {
     }
 
     public int makeID(int hour, int minute, int second){
+        Calendar tmpCal = Calendar.getInstance();
         StringBuilder sb = new StringBuilder();
         sb.append(hour);
         sb.append(minute);
         sb.append(second);
+        sb.append(tmpCal.get(Calendar.MILLISECOND));
 
         return Integer.parseInt(sb.toString());
     }
 
     //pendingintent id는 무조건 고유해야함.
     public void newAlarm(int id, long time){
+
+        Log.d(TAG , "알람등록");
 
         Intent tmpIntent = new Intent(context, AlarmReceiver.class);
 
@@ -71,6 +76,7 @@ public class AlarmLogic {
 
     }
     public void unregisterAlarm(int id){
+        Log.d(TAG , "알람취소");
 
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 

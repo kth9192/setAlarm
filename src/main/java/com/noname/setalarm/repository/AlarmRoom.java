@@ -22,9 +22,12 @@ public class AlarmRoom {
     @TypeConverters(ClockTypeConverter.class)
     public final  List<ClockModel> timeList;
 
-    public AlarmRoom(@NonNull String alarmId, List<ClockModel> timeList) {
+    private boolean checked;
+
+    public AlarmRoom(@NonNull String alarmId, List<ClockModel> timeList, boolean checked) {
         this.alarmId = alarmId;
         this.timeList = timeList;
+        this.checked = checked;
     }
 
     @NonNull
@@ -34,5 +37,9 @@ public class AlarmRoom {
 
     public List<ClockModel> getTimeList() {
         return timeList;
+    }
+
+    public boolean isChecked() {
+        return checked;
     }
 }

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,24 +61,31 @@ public class AlarmAdpater extends ListAdapter<AlarmRoom, AlarmAdpater.AlarmViewH
                 for (ClockModel clockModel: getItem(i).getTimeList()){
                     tmplist.add(clockModel);
                 }
+
                 intent.putParcelableArrayListExtra("targetList", tmplist);
                 intent.putExtra("alarmId", getItem(i).getAlarmId());
                 context.startActivity(intent);
             }
         });
 
+        alarmViewHodler.recyclerItemAlarmBinding.onswitch.setChecked(getItem(i).isChecked());
         alarmViewHodler.getRecyclerItemAlarmBinding().onswitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
                 if (isChecked){
+                    Log.d(TAG , "스위치 ON");
+                    alarmRoomViewModel.updateState(getItem(i).getAlarmId(), true);
+
                     for (ClockModel clockModel : getItem(i).getTimeList()){
                         alarmLogic.setToCalendar(clockModel.getHour(), clockModel.getMinute(),
                                 clockModel.isAm_pm());
                         alarmLogic.newAlarm(clockModel.getId(),
                                 alarmLogic.getCalendarTime());
                     }
-
                 }else {
+                    Log.d(TAG , "스위치 OFF");
+                    alarmRoomViewModel.updateState(getItem(i).getAlarmId(), false);
                     //알람은 시스템에서 각각 id를 가진다.
                     //알람은 intent로 취소하며 intent는 id 로 만들어진다.
                     //switch를 누른 리스트 위치의 custommodel list의 알람을 전부끈다.
@@ -89,6 +97,7 @@ public class AlarmAdpater extends ListAdapter<AlarmRoom, AlarmAdpater.AlarmViewH
         });
 
         alarmViewHodler.getRecyclerItemAlarmBinding().cancleBtn.setOnClickListener(view -> {
+
             if (alarmViewHodler.getRecyclerItemAlarmBinding().onswitch.isChecked()){
                 for (ClockModel clockModel : getItem(i).getTimeList()) {
                     alarmLogic.unregisterAlarm(clockModel.getId());
@@ -97,6 +106,12 @@ public class AlarmAdpater extends ListAdapter<AlarmRoom, AlarmAdpater.AlarmViewH
 
             alarmRoomViewModel.delete(getItem(i));
         });
+    }
+
+    @Override
+    public long getItemId(int position) {
+        super.getItemId(position);
+        return getItem(position).getAlarmId().hashCode();
     }
 
     public static final DiffUtil.ItemCallback<AlarmRoom> DIFF_CALLBACK =
@@ -124,7 +139,6 @@ public class AlarmAdpater extends ListAdapter<AlarmRoom, AlarmAdpater.AlarmViewH
             super(itemView);
             recyclerItemAlarmBinding = DataBindingUtil.bind(itemView);
             recyclerItemAlarmBinding.executePendingBindings();
-            recyclerItemAlarmBinding.onswitch.setChecked(true);
         }
 
         public RecyclerItemAlarmBinding getRecyclerItemAlarmBinding() {

@@ -20,6 +20,9 @@ public interface AlarmDao {
     @Query("UPDATE AlarmRoom SET timeList= :timeList WHERE alarmId = :id")
     void updateAlarm(String id, List<ClockModel> timeList);
 
+    @Query("UPDATE AlarmRoom SET checked= :checked WHERE alarmId = :id")
+    void updateAlarmState(String id , boolean checked);
+
     @Delete
     void deleteAlarm(AlarmRoom alarmRoom);
 

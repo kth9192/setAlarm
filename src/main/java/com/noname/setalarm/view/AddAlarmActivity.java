@@ -176,7 +176,8 @@ public class AddAlarmActivity extends AppCompatActivity {
                                     tmpList.get(i).getMinute(),
                             alarmLogic.getCalendarTime());
                 }
-                viewModel.insertAlarm(new AlarmRoom(UUID.randomUUID().toString(), tmpList));
+                viewModel.insertAlarm(new AlarmRoom(UUID.randomUUID().toString(), tmpList, true));
+                Log.d(TAG , "insertAlarm" + UUID.randomUUID().toString());
             }
             viewModel.deleteAll();
             super.onBackPressed();

@@ -49,6 +49,10 @@ public class AlarmRoomRepo {
         executorService.execute(() -> alarmDao.deleteAlarm(alarmRoom));
     }
 
+    public void updateAlarmState(String id, boolean checked){
+        executorService.execute(() -> alarmDao.updateAlarmState(id, checked));
+    }
+
     public void insertClockModel(ClockModel clockModel) {
         executorService.execute(() -> clockDao.insertClock(clockModel));
     }

@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 rescaleViewAnimation(activityMainBinding.fab, 0, 300, new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) {
-
+                        activityMainBinding.fab.setClickable(false);
                     }
 
                     @Override
@@ -71,12 +71,11 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
-
-
             }
         });
 
         AlarmAdpater alarmAdpater = new AlarmAdpater(this, alarmRoomViewModel);
+        alarmAdpater.setHasStableIds(true);
         activityMainBinding.recycler.setAdapter(alarmAdpater);
         activityMainBinding.recycler.setLayoutManager(new LinearLayoutManager(this));
 
@@ -101,6 +100,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        activityMainBinding.fab.setClickable(true);
     }
 
     @Override
