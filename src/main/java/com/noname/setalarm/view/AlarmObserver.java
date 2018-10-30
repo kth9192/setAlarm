@@ -12,10 +12,12 @@ public class AlarmObserver extends BaseObservable {
 
     private List<ClockModel> tmpList;
     private boolean checked;
+    private String memo;
 
     public AlarmObserver(AlarmRoom alarmRoom) {
         tmpList = alarmRoom.getTimeList();
         checked = alarmRoom.isChecked();
+        memo = alarmRoom.getMemo();
     }
 
     @Bindable
@@ -29,6 +31,11 @@ public class AlarmObserver extends BaseObservable {
         }
 
         return result.toString();
+    }
+
+    @Bindable
+    public String getMemo(){
+        return memo;
     }
 
 }

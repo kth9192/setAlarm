@@ -8,7 +8,6 @@ import androidx.databinding.DataBindingUtil;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
@@ -16,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -95,19 +93,19 @@ public class AddAlarmActivity extends AppCompatActivity {
 //            }
 //        });
 
-        ClockAdapterDiff clockAdapterDiff = new ClockAdapterDiff(getApplicationContext());
+        ClockAdapter clockAdapter = new ClockAdapter(getApplicationContext());
         viewModel.getListLiveData().observe(this, clockModels -> {
-            clockAdapterDiff.submitList(clockModels);
+            clockAdapter.submitList(clockModels);
             Log.d(TAG , "모델추가");
         });
 
-        clockAdapterDiff.setClockClickListener((hour, minute) -> {
+        clockAdapter.setClockClickListener((hour, minute) -> {
             activityAddalarmBinding.timer.setHour(hour);
             activityAddalarmBinding.timer.setMinute(minute);
             revealpm(hour);
         });
 
-        activityAddalarmBinding.recycler.setAdapter(clockAdapterDiff);
+        activityAddalarmBinding.recycler.setAdapter(clockAdapter);
         LinearLayoutManager horizontalLayout = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         activityAddalarmBinding.recycler.setLayoutManager(horizontalLayout);
 
@@ -117,9 +115,9 @@ public class AddAlarmActivity extends AppCompatActivity {
             public void onTimeChanged(TimePicker timePicker, int hourOfDay, int minutes) {
                 Log.d(TAG, "시" + hourOfDay + ":" + minutes + "분");
 
-                viewModel.updateHour(clockAdapterDiff.getSelectedID(), hourOfDay);
-                viewModel.updateMinute(clockAdapterDiff.getSelectedID(),  minutes);
-                viewModel.updateAMPM(clockAdapterDiff.getSelectedID(),  hourOfDay >= 12);
+                viewModel.updateHour(clockAdapter.getSelectedID(), hourOfDay);
+                viewModel.updateMinute(clockAdapter.getSelectedID(),  minutes);
+                viewModel.updateAMPM(clockAdapter.getSelectedID(),  hourOfDay >= 12);
 
                 Calendar datetime = Calendar.getInstance();
                 datetime.set(Calendar.HOUR_OF_DAY, hourOfDay);
@@ -176,7 +174,8 @@ public class AddAlarmActivity extends AppCompatActivity {
                                     tmpList.get(i).getMinute(),
                             alarmLogic.getCalendarTime());
                 }
-                viewModel.insertAlarm(new AlarmRoom(UUID.randomUUID().toString(), tmpList, true));
+                viewModel.insertAlarm(new AlarmRoom(UUID.randomUUID().toString(), tmpList, true,
+                        activityAddalarmBinding.memo.getText().toString()));
                 Log.d(TAG , "insertAlarm" + UUID.randomUUID().toString());
             }
             viewModel.deleteAll();

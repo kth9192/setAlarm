@@ -18,8 +18,8 @@ final class MyDetailsLookup extends ItemDetailsLookup {
         View view = mRecyclerView.findChildViewUnder(e.getX(), e.getY());
 //        if (view != null) {
 //            RecyclerView.ViewHolder holder = mRecyclerView.getChildViewHolder(view);
-//            if (holder instanceof ClockAdapterDiff.ClockViewHodler) {
-//                return ((ClockAdapterDiff.ClockViewHodler) holder).getClockItemDetails(e);
+//            if (holder instanceof ClockAdapter.ClockViewHodler) {
+//                return ((ClockAdapter.ClockViewHodler) holder).getClockItemDetails(e);
 //            }
 //        }
         return null;

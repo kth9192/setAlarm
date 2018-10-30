@@ -1,20 +1,16 @@
 package com.noname.setalarm.view;
 
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.annotation.NonNull;
-import androidx.recyclerview.selection.ItemDetailsLookup;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
-import android.util.Log;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -22,12 +18,9 @@ import com.noname.setalarm.R;
 import com.noname.setalarm.databinding.RecyclerClockItemBinding;
 import com.noname.setalarm.model.ClockModel;
 
-import java.util.ArrayList;
-import java.util.List;
+public class ClockAdapter extends ListAdapter<ClockModel, ClockAdapter.ClockViewHodler> {
 
-public class ClockAdapterDiff extends ListAdapter<ClockModel, ClockAdapterDiff.ClockViewHodler> {
-
-    private static String TAG = ClockAdapterDiff.class.getSimpleName();
+    private static String TAG = ClockAdapter.class.getSimpleName();
     private int selectedID = -1;
     private Context context;
 
@@ -37,7 +30,7 @@ public class ClockAdapterDiff extends ListAdapter<ClockModel, ClockAdapterDiff.C
         this.clockClickListener = clockClickListener;
     }
 
-    protected ClockAdapterDiff(Context context) {
+    protected ClockAdapter(Context context) {
         super(DIFF_CALLBACK);
         this.context = context;
     }
@@ -117,6 +110,9 @@ public class ClockAdapterDiff extends ListAdapter<ClockModel, ClockAdapterDiff.C
             super(itemView);
             recyclerClockItemBinding = DataBindingUtil.bind(itemView);
             recyclerClockItemBinding.executePendingBindings();
+            recyclerClockItemBinding.hour.setTypeface(null, Typeface.BOLD);
+            recyclerClockItemBinding.minute.setTypeface(null, Typeface.BOLD);
+            recyclerClockItemBinding.divider.setTypeface(null, Typeface.BOLD);
         }
 
         public RecyclerClockItemBinding getRecyclerClockItemBinding() {

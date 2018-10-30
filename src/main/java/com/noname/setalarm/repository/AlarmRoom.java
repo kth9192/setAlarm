@@ -23,11 +23,13 @@ public class AlarmRoom {
     public final  List<ClockModel> timeList;
 
     private boolean checked;
+    private String memo;
 
-    public AlarmRoom(@NonNull String alarmId, List<ClockModel> timeList, boolean checked) {
+    public AlarmRoom(@NonNull String alarmId, List<ClockModel> timeList, boolean checked, String memo) {
         this.alarmId = alarmId;
         this.timeList = timeList;
         this.checked = checked;
+        this.memo = memo;
     }
 
     @NonNull
@@ -41,5 +43,9 @@ public class AlarmRoom {
 
     public boolean isChecked() {
         return checked;
+    }
+
+    public String getMemo() {
+        return memo;
     }
 }
