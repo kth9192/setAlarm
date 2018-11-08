@@ -29,9 +29,13 @@ import com.noname.setalarm.model.ClockModel;
 import com.noname.setalarm.repository.AlarmRoom;
 import com.noname.setalarm.viewmodel.ClockViewModel;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.UUID;
 
 public class AddAlarmActivity extends AppCompatActivity {
@@ -154,9 +158,11 @@ public class AddAlarmActivity extends AppCompatActivity {
                 List<ClockModel> tmpList = viewModel.getListLiveData().getValue();
 
                 for (int i = 0; i < tmpList.size(); i++) {
+
                     alarmLogic.setToCalendar(tmpList.get(i).getHour(),
                             tmpList.get(i).getMinute(),
                             tmpList.get(i).getHour() >= 12);
+
                     alarmLogic.newAlarm(tmpList.get(i).getHour() +
                                     tmpList.get(i).getMinute(),
                             alarmLogic.getCalendarTime());
@@ -167,13 +173,17 @@ public class AddAlarmActivity extends AppCompatActivity {
                 List<ClockModel> tmpList = viewModel.getListLiveData().getValue();
 
                 for (int i = 0; i < tmpList.size(); i++) {
+
                     alarmLogic.setToCalendar(tmpList.get(i).getHour(),
                             tmpList.get(i).getMinute(),
                             tmpList.get(i).getHour() >= 12);
+
                     alarmLogic.newAlarm(tmpList.get(i).getHour() +
                                     tmpList.get(i).getMinute(),
                             alarmLogic.getCalendarTime());
+
                 }
+
                 viewModel.insertAlarm(new AlarmRoom(UUID.randomUUID().toString(), tmpList, true,
                         activityAddalarmBinding.memo.getText().toString()));
                 Log.d(TAG , "insertAlarm" + UUID.randomUUID().toString());

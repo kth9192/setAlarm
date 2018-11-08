@@ -8,6 +8,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
+
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.TaskStackBuilder;
 
@@ -24,10 +26,11 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
+        Log.d(TAG, "알람 NOTIFICATION");
+
         id = UUID.randomUUID().toString();
 
         NotificationManager notificationManager = null;
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "test";

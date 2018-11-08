@@ -9,7 +9,13 @@ import android.util.Log;
 import com.noname.setalarm.receiver.AlarmReceiver;
 import com.noname.setalarm.repository.AlarmDao;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
+
+import androidx.room.Dao;
 
 public class AlarmLogic {
 
@@ -27,7 +33,7 @@ public class AlarmLogic {
     public void setToCalendar(int hour, int minute, boolean am_pm){
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
-        calendar.set(Calendar.AM_PM, am_pm ? Calendar.AM : Calendar.PM);
+        calendar.set(Calendar.AM_PM, am_pm ? Calendar.PM : Calendar.AM);
     }
 
     public int getCurrentHour(){
@@ -69,9 +75,29 @@ public class AlarmLogic {
         if(System.currentTimeMillis() < time) {
             am.setInexactRepeating(AlarmManager.RTC_WAKEUP, time,
                     AlarmManager.INTERVAL_DAY, pendingIntent);
+
+//            Date date1 = new Date(System.currentTimeMillis());
+//            Date date2 = new Date(time);
+//            DateFormat formatter = new SimpleDateFormat("HH:mm:ss.SSS");
+//            formatter.setTimeZone(TimeZone.getTimeZone("gmt"));
+//            String currentTimeMillis = formatter.format(date1);
+//            String timestring = formatter.format(date2);
+//
+//            Log.d(TAG , "현재시간" + currentTimeMillis + " 이후" + timestring);
+
         }else {
             am.setInexactRepeating(AlarmManager.RTC_WAKEUP, time + AlarmManager.INTERVAL_DAY,
                     AlarmManager.INTERVAL_DAY, pendingIntent);
+
+//            Date date1 = new Date(System.currentTimeMillis());
+//            Date date2 = new Date(time);
+//            DateFormat formatter = new SimpleDateFormat("HH:mm:ss.SSS");
+//            formatter.setTimeZone(TimeZone.getTimeZone("gmt"));
+//            String currentTimeMillis = formatter.format(date1);
+//            String timestring = formatter.format(date2);
+//
+//            Log.d(TAG , "현재시간" + currentTimeMillis + " 이전" + timestring);
+
         }
 
     }
