@@ -20,12 +20,10 @@ public class ImageBinder {
 
     @BindingAdapter("imageInt")
     public static void loadImage(ImageView imageView, int resID){
-        RequestOptions cropOptions = new RequestOptions().circleCrop();
 
         Glide.with(imageView.getContext()).load(resID)
                 .apply(RequestOptions.bitmapTransform(new CircleCrop()))
                 .into(imageView);
-
     }
 
 }

@@ -270,12 +270,15 @@ public class AddAlarmActivity extends AppCompatActivity {
         activityAddalarmBinding.pm.setVisibility(View.VISIBLE);
         Animator reveal = createRevealAnimator(true, activityAddalarmBinding.pm);
         reveal.start();
+        activityAddalarmBinding.am.setVisibility(View.INVISIBLE);
     }
 
     /**
      * Hide the am
      */
     private void hideThepm() {
+        activityAddalarmBinding.am.setVisibility(View.VISIBLE);
+
         Animator hide = createRevealAnimator(false, activityAddalarmBinding.pm);
         hide.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -285,6 +288,7 @@ public class AddAlarmActivity extends AppCompatActivity {
             }
         });
         hide.start();
+
     }
 
     private void rescaleViewAnimation(View view,

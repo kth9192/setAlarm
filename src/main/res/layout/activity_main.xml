@@ -13,6 +13,16 @@
         android:layout_height="match_parent"
         >
 
+        <TextView
+            android:id="@+id/tutorial"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:text="@string/tutorial"
+            android:gravity="center"
+            android:textColor="@android:color/darker_gray"
+            />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"
             android:layout_width="match_parent"

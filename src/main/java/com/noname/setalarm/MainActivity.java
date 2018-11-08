@@ -97,6 +97,12 @@ public class MainActivity extends AppCompatActivity {
                     });
                 }
                 alarmAdpater.submitList(alarmRooms);
+
+                if(alarmRooms.size() > 0){
+                    activityMainBinding.tutorial.setVisibility(View.GONE);
+                }else {
+                    activityMainBinding.tutorial.setVisibility(View.VISIBLE);
+                }
             }
         });
 
