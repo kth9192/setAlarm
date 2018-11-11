@@ -163,8 +163,7 @@ public class AddAlarmActivity extends AppCompatActivity {
                             tmpList.get(i).getMinute(),
                             tmpList.get(i).getHour() >= 12);
 
-                    alarmLogic.newAlarm(tmpList.get(i).getHour() +
-                                    tmpList.get(i).getMinute(),
+                    alarmLogic.newAlarm(tmpList.get(i).getId(),
                             alarmLogic.getCalendarTime());
                 }
                 viewModel.updateAlarm(intent.getStringExtra("alarmId"), tmpList);
@@ -178,8 +177,7 @@ public class AddAlarmActivity extends AppCompatActivity {
                             tmpList.get(i).getMinute(),
                             tmpList.get(i).getHour() >= 12);
 
-                    alarmLogic.newAlarm(tmpList.get(i).getHour() +
-                                    tmpList.get(i).getMinute(),
+                    alarmLogic.newAlarm(tmpList.get(i).getId(),
                             alarmLogic.getCalendarTime());
 
                 }

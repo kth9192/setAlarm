@@ -22,12 +22,18 @@ public class AlarmLogic {
     private static String TAG = AlarmLogic.class.getSimpleName();
     private Context context;
     private Calendar calendar = Calendar.getInstance();
-    private AlarmManager am;
+    private static AlarmManager am;
+    private static PendingIntent sender;
 
     public AlarmLogic(Context context) {
         this.context = context;
-        am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         calendar.setTimeInMillis(System.currentTimeMillis());
+    }
+
+    private void setAm(int id){
+        am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent alarmIntent = new Intent(context, AlarmReceiver.class);
+        sender = PendingIntent.getBroadcast(context, id, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     public void setToCalendar(int hour, int minute, boolean am_pm){
@@ -67,14 +73,11 @@ public class AlarmLogic {
     public void newAlarm(int id, long time){
 
         Log.d(TAG , "알람등록");
-
-        Intent tmpIntent = new Intent(context, AlarmReceiver.class);
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, tmpIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        setAm(id);
 
         if(System.currentTimeMillis() < time) {
             am.setInexactRepeating(AlarmManager.RTC_WAKEUP, time,
-                    AlarmManager.INTERVAL_DAY, pendingIntent);
+                    AlarmManager.INTERVAL_DAY, sender);
 
 //            Date date1 = new Date(System.currentTimeMillis());
 //            Date date2 = new Date(time);
@@ -87,7 +90,7 @@ public class AlarmLogic {
 
         }else {
             am.setInexactRepeating(AlarmManager.RTC_WAKEUP, time + AlarmManager.INTERVAL_DAY,
-                    AlarmManager.INTERVAL_DAY, pendingIntent);
+                    AlarmManager.INTERVAL_DAY, sender);
 
 //            Date date1 = new Date(System.currentTimeMillis());
 //            Date date2 = new Date(time);
@@ -104,10 +107,10 @@ public class AlarmLogic {
     public void unregisterAlarm(int id){
         Log.d(TAG , "알람취소");
 
-        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
-        Intent unRegisterIntent = new Intent(context, AlarmReceiver.class);
-        PendingIntent sender = PendingIntent.getBroadcast(context, id, unRegisterIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        setAm(id);
         am.cancel(sender);
+        sender.cancel();
+        am = null;
+        sender = null;
     }
 }
