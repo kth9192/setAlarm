@@ -107,7 +107,7 @@ public class AlarmLogic {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         Intent unRegisterIntent = new Intent(context, AlarmReceiver.class);
-        PendingIntent sender = PendingIntent.getBroadcast(context, id, unRegisterIntent, 0);
+        PendingIntent sender = PendingIntent.getBroadcast(context, id, unRegisterIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         am.cancel(sender);
     }
 }
