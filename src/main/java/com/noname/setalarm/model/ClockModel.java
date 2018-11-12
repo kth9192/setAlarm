@@ -9,7 +9,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.annotation.NonNull;
 
-@Entity()
+@Entity
 public class ClockModel implements Parcelable {
 
     @PrimaryKey

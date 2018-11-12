@@ -58,12 +58,9 @@ public class AlarmAdpater extends ListAdapter<AlarmRoom, AlarmAdpater.AlarmViewH
             public void onClick(View v) {
                 Intent intent = new Intent(context, AddAlarmActivity.class);
 
-                ArrayList<ClockModel> tmplist = new ArrayList();
-                for (ClockModel clockModel: getItem(i).getTimeList()){
-                    tmplist.add(clockModel);
-                }
+                ArrayList<ClockModel> tmplist = new ArrayList(getItem(i).getTimeList());
 
-                intent.putParcelableArrayListExtra("targetList", tmplist);
+                intent.putParcelableArrayListExtra("modifyList", tmplist);
                 intent.putExtra("alarmId", getItem(i).getAlarmId());
                 context.startActivity(intent);
             }
@@ -75,7 +72,6 @@ public class AlarmAdpater extends ListAdapter<AlarmRoom, AlarmAdpater.AlarmViewH
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 if (isChecked){
-                    Log.d(TAG , "스위치 ON");
                     alarmRoomViewModel.updateState(getItem(i).getAlarmId(), true);
 
                     for (ClockModel clockModel : getItem(i).getTimeList()){
@@ -91,7 +87,6 @@ public class AlarmAdpater extends ListAdapter<AlarmRoom, AlarmAdpater.AlarmViewH
                     //알람은 intent로 취소하며 intent는 id 로 만들어진다.
                     //switch를 누른 리스트 위치의 custommodel list의 알람을 전부끈다.
                     for (ClockModel clockModel : getItem(i).getTimeList()) {
-                        Log.d(TAG, "취소ID" + clockModel.getId());
                         alarmLogic.unregisterAlarm(clockModel.getId());
                     }
                 }
@@ -117,7 +112,7 @@ public class AlarmAdpater extends ListAdapter<AlarmRoom, AlarmAdpater.AlarmViewH
         return getItem(position).getAlarmId().hashCode();
     }
 
-    public static final DiffUtil.ItemCallback<AlarmRoom> DIFF_CALLBACK =
+    private static final DiffUtil.ItemCallback<AlarmRoom> DIFF_CALLBACK =
             new DiffUtil.ItemCallback<AlarmRoom>() {
                 @Override
                 public boolean areItemsTheSame(
@@ -138,10 +133,12 @@ public class AlarmAdpater extends ListAdapter<AlarmRoom, AlarmAdpater.AlarmViewH
 
         private RecyclerItemAlarmBinding recyclerItemAlarmBinding;
 
-        public AlarmViewHodler(View itemView) {
+        AlarmViewHodler(View itemView) {
             super(itemView);
             recyclerItemAlarmBinding = DataBindingUtil.bind(itemView);
-            recyclerItemAlarmBinding.executePendingBindings();
+            if (recyclerItemAlarmBinding != null) {
+                recyclerItemAlarmBinding.executePendingBindings();
+            }
         }
 
         public RecyclerItemAlarmBinding getRecyclerItemAlarmBinding() {

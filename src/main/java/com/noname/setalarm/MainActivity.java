@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), AddAlarmActivity.class);
                         startActivity(intent);
                         overridePendingTransition(0, 0);
-
                     }
 
                     @Override
@@ -88,9 +87,6 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public int compare(ClockModel oldData, ClockModel newData) {
                             // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
-//
-//                            Log.d(TAG, "전데이터 " + oldData.getId());
-//                            Log.d(TAG, "후데이터 " + newData.getId());
 
                             return Integer.compare(oldData.getId(), newData.getId());
                         }
@@ -119,27 +115,6 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         rescaleViewAnimation(activityMainBinding.fab, 1f, 300, null);
 
-//        activityMainBinding.fab.animate()
-//                .scaleX(1)
-//                .scaleY(1)
-//                .setInterpolator(new FastOutSlowInInterpolator())
-//                .setStartDelay(200)
-//                .setListener(new Animator.AnimatorListener() {
-//                    @Override
-//                    public void onAnimationStart(Animator animation) { }
-//
-//                    @Override
-//                    public void onAnimationEnd(Animator animation) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onAnimationCancel(Animator animation) { }
-//
-//                    @Override
-//                    public void onAnimationRepeat(Animator animation) { }
-//                })
-//                .start();
     }
 
     private void rescaleViewAnimation(View view,

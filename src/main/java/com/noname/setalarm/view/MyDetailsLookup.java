@@ -6,6 +6,9 @@ import android.view.View;
 import androidx.recyclerview.selection.ItemDetailsLookup;
 import androidx.recyclerview.widget.RecyclerView;
 
+/*
+* selectionTracker 용
+* */
 final class MyDetailsLookup extends ItemDetailsLookup {
 
     private final RecyclerView mRecyclerView;

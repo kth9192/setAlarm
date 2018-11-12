@@ -7,15 +7,12 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.noname.setalarm.receiver.AlarmReceiver;
-import com.noname.setalarm.repository.AlarmDao;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
-
-import androidx.room.Dao;
 
 public class AlarmLogic {
 
@@ -72,7 +69,6 @@ public class AlarmLogic {
     //pendingintent id는 무조건 고유해야함.
     public void newAlarm(int id, long time){
 
-        Log.d(TAG , "알람등록");
         setAm(id);
 
         if(System.currentTimeMillis() < time) {
@@ -105,7 +101,6 @@ public class AlarmLogic {
 
     }
     public void unregisterAlarm(int id){
-        Log.d(TAG , "알람취소");
 
         setAm(id);
         am.cancel(sender);
