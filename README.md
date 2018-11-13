@@ -6,7 +6,7 @@ SetAlarm Project
 
 <img src ="https://user-images.githubusercontent.com/7121217/48350868-cc970900-e6cb-11e8-924a-0cc94a0a8587.gif" width="30%">
 
-###제원
+###  제원
 
 -	언어 : android
 -	db : androd Room
@@ -14,7 +14,7 @@ SetAlarm Project
 -	andorid material
 -	gson library
 
-###ViewModel
+###  ViewModel
 
 -	정의 : ui 컨트롤러와 repository를 연결. 데이터에 대한 부분을 추상화 함으로써 객체지향적 프로그래밍을 유도함. 안드로이드는 Lifecycle 에 관한 기능도 포함해 안정적인 프로그래밍 지원.
 
@@ -24,7 +24,7 @@ SetAlarm Project
 
 -	구성 : 사용자 - UI - Viewmodel - livedata - repository(room + DAO)
 
-### DB 구성
+###  DB 구성
 
 1.	ClockModel : 한개의 알람세트의 데이터를 담당하는 모델.
 2.	AlarmModel : ClockModel의 묶음. 알람세트의 전체뷰를 보여주는 모델.
